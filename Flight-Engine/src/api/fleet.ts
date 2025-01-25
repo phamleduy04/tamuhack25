@@ -16,7 +16,7 @@ fleetsRouter.get('/', (req, res) => {
 
         if (plane) {
             // If the plane is found, return it
-            res.json(plane);
+            res.json([plane]);
         } else {
             // If the plane is not found, return an error
             res.status(404).json({ error: 'Plane not found' });
