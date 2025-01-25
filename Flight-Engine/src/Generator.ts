@@ -1,7 +1,7 @@
 import seedrandom from 'seedrandom';
 import haversine from 'haversine-distance';
 import { DateTime } from 'luxon';
-import { aircraft } from './data/aircraft';
+import { fleets } from './data/fleets';
 import { Airport, Flight, FlightDuration, Location, RandomAircraft } from './types';
 
 // Helper function to create a seeded random number generator
@@ -44,7 +44,7 @@ export class Generator {
     const distance = calcDistance(origin.location, destination.location);
 
     // Assign a random aircraft from the available fleet
-    const randAircraft = aircraft[this.random(0, aircraft.length - 1)];
+    const randAircraft = fleets[this.random(0, fleets.length - 1)];
 
     // Determine the flight duration based on distance and aircraft speed
     const duration: FlightDuration = {

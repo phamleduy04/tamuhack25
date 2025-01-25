@@ -45,7 +45,7 @@ export interface FlightDuration {
 
 export interface Flight {
   flightNumber: string;
-  aircraft: Aircraft;
+  aircraft: RandomAircraft;
   origin: Airport;
   destination: Airport;
   distance: number;
