@@ -3,10 +3,12 @@ import 'dotenv/config';
 
 import express from 'express';
 import logger from 'morgan';
+import bodyParser from 'body-parser';
 // import rateLimit from 'express-rate-limit';
 
 // Routes
 import indexRouter from './routes/index';
+import tagRouter from './routes/Tag';
 // Create Express server
 export const app = express();
 
@@ -29,6 +31,8 @@ export const app = express();
 // Express configuration
 app.set('port', process.env.PORT || 3000);
 app.use(logger('dev'));
+app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/', indexRouter);
+app.use('/tag', tagRouter);

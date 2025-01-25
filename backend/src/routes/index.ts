@@ -37,7 +37,7 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
 
         const params = {
             Bucket: process.env.B2_BUCKET_NAME!,
-            Key: req.file.originalname,
+            Key: req.file.filename,
             Body: fileStream,
             ContentType: req.file.mimetype,
         };
@@ -50,7 +50,7 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
 
         res.json({
             message: 'File uploaded successfully',
-            location: data.Location,
+            fileName: decodeURIComponent(data.Location.slice(1)),
             url: `https://cdn.aviateur.tech${data.Location}`
         });
     } catch (err) {
