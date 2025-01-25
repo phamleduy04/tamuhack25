@@ -51,7 +51,7 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
         res.json({
             message: 'File uploaded successfully',
             location: data.Location,
-            url: `https://cdn.aviateur.tech${location}`
+            url: `https://cdn.aviateur.tech${data.Location}`
         });
     } catch (err) {
         console.error('Upload error:', err);
