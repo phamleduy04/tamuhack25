@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/server.ts",
-    "dev": "ts-node-dev src/server.ts",
+    "dev": "NODE_ENV=development ts-node-dev src/server.ts",
     "build": "npm run build-ts",
     "serve": "node dist/server.js",
     "test": "jest --coverage=true --verbose",

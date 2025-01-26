@@ -11,9 +11,10 @@ import indexRouter from './routes/index';
 import tagRouter from './routes/Tag';
 import flightRouter from './routes/flights';
 import futureFlightRouter from './routes/future-flights';
+import airportRouter from './routes/airport';
 
 import getAllStates from './utils/getAllStates';
-// getAllStates();
+if (process.env.NODE_ENV != 'development') getAllStates();
 setInterval(getAllStates, 600_000);
 
 // Create Express server
@@ -45,3 +46,4 @@ app.use('/', indexRouter);
 app.use('/tag', tagRouter);
 app.use('/flights', flightRouter);
 app.use('/future-flights', futureFlightRouter);
+app.use('/airport', airportRouter);
