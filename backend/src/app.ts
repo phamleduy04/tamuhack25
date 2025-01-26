@@ -10,6 +10,12 @@ import bodyParser from 'body-parser';
 import indexRouter from './routes/index';
 import tagRouter from './routes/Tag';
 import flightRouter from './routes/flights';
+import futureFlightRouter from './routes/future-flights';
+
+import getAllStates from './utils/getAllStates';
+// getAllStates();
+setInterval(getAllStates, 600_000);
+
 // Create Express server
 export const app = express();
 
@@ -38,3 +44,4 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/', indexRouter);
 app.use('/tag', tagRouter);
 app.use('/flights', flightRouter);
+app.use('/future-flights', futureFlightRouter);
