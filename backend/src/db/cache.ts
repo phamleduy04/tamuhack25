@@ -6,7 +6,7 @@ const get = async (key: string) => {
     return await redis.get(key);
 };
 
-const set = async (key: string, value: string, time: string | null = null) => {
+const set = async (key: string, value: string, time: number | null = null) => {
     if (!time) return await redis.set(key, value);
     return await redis.set(key, value, 'EX', time);
 };

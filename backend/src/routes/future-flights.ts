@@ -20,7 +20,7 @@ route.get('/', async (req, res) => {
     const now = dayjs();
     const response = await openskyClient.get(`/flights/aircraft?icao24=${icao24}&begin=${now.subtract(1, 'day').unix()}&end=${now.add(1, 'day').unix()}`);
     res.json(response.data);
-    await set(`future-flights:${icao24}`, JSON.stringify(response.data));
+    await set(`future-flights:${icao24}`, JSON.stringify(response.data), 300);
 });
 
 
