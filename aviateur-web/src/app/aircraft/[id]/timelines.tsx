@@ -48,7 +48,7 @@ function TimeLineItem({
 
 export default function Timeline({ items }: { items: TimeLineItem[] }) {
 	return (
-		<div className="flex flex-col mt-auto justify-self-center scale-125 origin-bottom-left">
+		<div className="flex flex-col mt-auto justify-self-center origin-bottom-left">
 			{items.map((item, index) => {
 				return <TimeLineItem key={index} {...item} />;
 			})}

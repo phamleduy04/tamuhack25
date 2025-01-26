@@ -3,7 +3,14 @@
 import { Map, Marker, ColorScheme, Annotation } from "mapkit-react";
 import Image from "next/image";
 
-export default function AircraftMap() {
+interface AircraftMapProps {
+	coords: {
+		latitude: number;
+		longitude: number;
+	}[];
+}
+
+export default function AircraftMap({ coords }: AircraftMapProps) {
 	return (
 		<Map
 			token={process.env.NEXT_PUBLIC_MAPKIT_TOKEN!}
@@ -15,7 +22,21 @@ export default function AircraftMap() {
 				longitudeDelta: 50,
 			}}
 		>
-			{/* <Marker latitude={46.52} longitude={6.57} /> */}
+			{coords.map((coord, index) => (
+				<Annotation
+					latitude={coord.latitude}
+					longitude={coord.longitude}
+					key={`bmitem_${index}`}
+				>
+					<Image
+						alt="Flight Icon"
+						src={"/img/flight-icon.png"}
+						height={20}
+						width={20}
+						style={{ transform: `rotate(${Math.random() * 360}deg)` }}
+					/>
+				</Annotation>
+			))}
 		</Map>
 	);
 }
