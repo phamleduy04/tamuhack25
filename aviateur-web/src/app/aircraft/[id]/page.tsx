@@ -69,7 +69,7 @@ export default async function AircraftPage({ params }: Props) {
 				</div>
 			</div>
 			<div className="grid grid-cols-5 auto-rows-[400px] gap-5 pt-5">
-				<div className="bg-white col-span-2 rounded-lg p-5 flex flex-col justify-start">
+				<div className="bg-white col-span-2 rounded-lg p-5 flex flex-col justify-start overflow-y-scroll">
 					<h1 className="font-bold text-3xl">Flight Schedule</h1>
 
 					<Timeline
