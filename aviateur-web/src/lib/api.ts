@@ -52,17 +52,8 @@ const schema = createSchema({
 		output: z.array(
 			z.object({
 				icao24: z.string(),
-				firstSeen: z.number(),
 				estDepartureAirport: z.string().nullable(),
-				lastSeen: z.number(),
 				estArrivalAirport: z.string().nullable(),
-				callsign: z.string(),
-				estDepartureAirportHorizDistance: z.number().nullable(),
-				estDepartureAirportVertDistance: z.number().nullable(),
-				estArrivalAirportHorizDistance: z.number().nullable(),
-				estArrivalAirportVertDistance: z.number().nullable(),
-				departureAirportCandidatesCount: z.number(),
-				arrivalAirportCandidatesCount: z.number(),
 			})
 		),
 	},
@@ -88,6 +79,7 @@ const schema = createSchema({
 
 export const $fetch = createFetch({
 	baseURL: "https://api.aviateur.tech",
+	// baseURL: "https://fde3-47-218-98-198.ngrok-free.app",
 	schema: schema,
 	plugins: [logger()],
 });

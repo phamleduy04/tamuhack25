@@ -20,7 +20,7 @@ export default async function AircraftPage({ params }: Props) {
 
 	const { data: flightScheduleData, error } = await $fetch("/future-flights", {
 		query: {
-			icao24: (await params).id,
+			icao24: aircraft.tail_number,
 		},
 	});
 

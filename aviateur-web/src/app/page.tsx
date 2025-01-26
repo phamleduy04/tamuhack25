@@ -12,10 +12,19 @@ export default async function Home() {
 		return <div>Error</div>;
 	}
 
+	const coords = fleet
+		.filter(
+			(aircraft) => aircraft.latitude !== null && aircraft.longitude !== null
+		)
+		.map((aircraft) => ({
+			latitude: aircraft.latitude!,
+			longitude: aircraft.longitude!,
+		}));
+
 	return (
 		<div className="min-h-screen px-10 pt-[12vh] max-w-7xl mx-auto">
 			<div className="aspect-video w-full rounded-lg bg-white mb-16 overflow-hidden">
-				<AircraftMap />
+				<AircraftMap coords={coords} />
 			</div>
 			<div className="grid grid-cols-2">
 				<div>
