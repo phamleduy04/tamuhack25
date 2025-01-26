@@ -1,10 +1,23 @@
 import { Router } from 'express';
 // import { getFlightCache } from '../db/cache';
-import openskyClient from '../apis/opensky';
+// import openskyClient from '../apis/opensky';
 import dayjs from 'dayjs';
 import { get, set } from '../db/cache';
+import flightawareClient from '../apis/flightaware';
 
 const route = Router();
+
+interface Flight {
+    ident_icao: string;
+    origin: {
+        code_icao: string;
+        name: string;
+    }
+    destination: {
+        code_icao: string;
+        name: string;
+    }
+}
 
 route.get('/', async (req, res) => {
     const { icao24 } = req.query;
@@ -18,9 +31,21 @@ route.get('/', async (req, res) => {
         return;
     }
     const now = dayjs();
-    const response = await openskyClient.get(`/flights/aircraft?icao24=${icao24}&begin=${now.subtract(1, 'day').unix()}&end=${now.add(1, 'day').unix()}`);
-    res.json(response.data);
-    await set(`future-flights:${icao24}`, JSON.stringify(response.data), 300);
+
+    const response = await flightawareClient.get(`/flights/${icao24}?start=${now.subtract(1, 'day').format()}&end=${now.add(1, 'day').format()}`);
+
+    const data = response.data.flights as Flight[];
+
+    const formattedData = data.map(flight => ({
+        icao24: flight.ident_icao,
+        estDepartureAirport: flight.origin.code_icao,
+        estDepartureAirportFullName: flight.origin.name,
+        estArrivalAirport: flight.destination.code_icao,
+        estArrivalAirportFullName: flight.destination.name,
+    }));
+
+    res.json(formattedData);
+    await set(`future-flights:${icao24}`, JSON.stringify(formattedData), 300);
 });
 
 
