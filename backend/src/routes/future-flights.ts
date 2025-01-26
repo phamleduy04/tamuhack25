@@ -32,7 +32,7 @@ route.get('/', async (req, res) => {
     }
     const now = dayjs();
 
-    const response = await flightawareClient.get(`/flights/${icao24}?start=${now.subtract(1, 'day').format()}&end=${now.add(12, 'hours').format()}`);
+    const response = await flightawareClient.get(`/flights/${icao24}?start=${now.subtract(1, 'day').toISOString()}&end=${now.add(12, 'hours').toISOString()}`);
 
     const data = response.data.flights as Flight[];
 
