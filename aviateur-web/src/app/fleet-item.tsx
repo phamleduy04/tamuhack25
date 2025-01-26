@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function FleetItem({ aircraft }: { aircraft: AircraftType }) {
 	return (
-		<Link href={`/aircraft/${aircraft.icao24}`}>
+		<Link href={`/aircraft/${aircraft.icao24}`} className="hover:scale-101 hover:translate-x-1 hover:-translate-y-1 transition-all">
 			<div className="bg-white text-black rounded aspect-video p-5">
 				<div className="h-[80%] w-full flex items-center justify-center overflow-hidden">
 					<Image
