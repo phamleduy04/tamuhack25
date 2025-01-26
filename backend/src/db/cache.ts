@@ -8,7 +8,7 @@ const get = async (key: string) => {
 
 const set = async (key: string, value: string, time: number | null = null) => {
     if (!time) return await redis.set(key, value);
-    return await redis.set(key, value, 'EX', time);
+    return await redis.set(key, value);
 };
 
 const getFlightCache = async () => {
