@@ -15,9 +15,11 @@ export default function FleetItem({ aircraft }: { aircraft: AircraftType }) {
 					/>
 				</div>
 				<div className="h-[20%] w-full flex items-end">
-					<h1 className="text-xl font-mono font-bold">{aircraft.icao24}</h1>
+					<h1 className="text-xl font-mono font-bold">
+						{aircraft.tail_number}
+					</h1>
 					<div className="justify-self-end ml-auto bg-black rounded-full text-white font-bold text-sm px-3 py-1">
-						{aircraft.callsign}
+						{aircraft.icao24.toUpperCase()}
 					</div>
 				</div>
 			</div>

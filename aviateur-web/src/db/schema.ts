@@ -6,7 +6,7 @@ export const reports = sqliteTable("reports", {
 	icao24: text("icao24").notNull(),
 	title: text("title").notNull(),
 	description: text("description").notNull(),
-	attachedScans: text("attached_scans", { mode: "json" }),
+	attachedScan: text("attached_scan"),
 	createdAt: integer("created_at", { mode: "timestamp" }).default(
 		sql`CURRENT_TIMESTAMP`
 	),

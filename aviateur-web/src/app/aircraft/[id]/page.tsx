@@ -2,15 +2,17 @@ import { AircraftOverhead } from "@/components/map";
 import Image from "next/image";
 import Timeline from "./timelines";
 import { $fetch, getAirportsData, getSpecificAircraftData } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface Props {
-	params: {
+	params: Promise<{
 		id: string;
-	};
+	}>;
 }
 
 export default async function AircraftPage({ params }: Props) {
-	const aircraft = await getSpecificAircraftData(params.id);
+	const aircraft = await getSpecificAircraftData((await params).id);
 
 	if (!aircraft) {
 		return <div>Aircraft not found</div>;
@@ -18,7 +20,7 @@ export default async function AircraftPage({ params }: Props) {
 
 	const { data: flightScheduleData, error } = await $fetch("/future-flights", {
 		query: {
-			icao24: params.id,
+			icao24: (await params).id,
 		},
 	});
 
@@ -99,6 +101,16 @@ export default async function AircraftPage({ params }: Props) {
 						latitude={aircraft.latitude!}
 						longitude={aircraft.longitude!}
 					/>
+				</div>
+				<div className="bg-white rounded-lg col-span-5 p-5">
+					<div className="flex items-center justify-start">
+						<h1 className="font-bold text-3xl">Reports</h1>
+						<div className="justify-self-end ml-auto">
+							<Link href={`/new-report?id=${(await params).id}`}>
+								<Button>New Report</Button>
+							</Link>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -13,6 +13,7 @@ export const createReport = actionClient
 			aircraftId: z.string(),
 			title: z.string(),
 			description: z.string(),
+			fileUrl: z.string(),
 		})
 	)
 	.action(async ({ parsedInput, ctx }) => {
@@ -32,6 +33,7 @@ export const createReport = actionClient
 			authorId: user.id,
 			authorImage: user.imageUrl,
 			authorName: user.fullName || "Aviateur User",
+			attachedScan: parsedInput.fileUrl,
 		});
 
 		return {

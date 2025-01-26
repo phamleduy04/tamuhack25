@@ -1,4 +1,5 @@
 import Client from "./client";
+import { $fetch } from "@/lib/api";
 
 export default async function Page({
 	searchParams,
@@ -6,6 +7,11 @@ export default async function Page({
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
 	const id = (await searchParams).id as string;
+	const { data: files, error } = await $fetch("/files");
+
+	if (error) {
+		return <div>Error fetching files</div>;
+	}
 
 	if (!id) {
 		return <div>No ID provided</div>;
@@ -18,7 +24,10 @@ export default async function Page({
 				<p className="text-2xl pt-3 pb-10">
 					Create a new report for aircraft {id}
 				</p>
-				<Client id={id} />
+				<Client
+					id={id}
+					files={files.map((file) => ({ key: file.key, url: file.url }))}
+				/>
 			</div>
 		</div>
 	);
