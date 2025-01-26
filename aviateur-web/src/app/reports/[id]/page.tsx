@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Messages from "./messages";
+import { getAircraftImage } from "@/lib/utils";
 
 interface PageProps {
 	params: Promise<{
@@ -55,11 +56,11 @@ export default async function Page({ params }: PageProps) {
 				</div>
 				<div className="flex items-center justify-center overflow-hidden">
 					<Image
-						src={`/img/aircraft/a321.png`}
+						src={getAircraftImage(42, aircraft.tail_number).image}
 						alt={"Plane Image"}
 						width={500}
 						height={500}
-						className="object-cover -translate-y-5 rotate-3 drop-shadow-2xl"
+						className="object-cover -translate-y-2 -scale-100 rotate-[175deg] drop-shadow-3xl"
 					/>
 				</div>
 			</div>
