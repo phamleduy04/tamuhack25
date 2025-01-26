@@ -31,7 +31,7 @@ export default async function Page({ params }: PageProps) {
 	}
 
 	return (
-		<div className="w-full max-w-7xl px-10 mx-auto pt-[20vh] font-arimo">
+		<div className="w-full max-w-7xl px-10 mx-auto pt-[10vh] font-arimo">
 			<div className="bg-white rounded-lg p-5 h-80 grid grid-cols-2 auto-rows-[100%] text-black">
 				<div className="flex flex-col items-start justify-center gap-y-2">
 					<h1 className="text-5xl font-bold">{report.title}</h1>
