@@ -51,7 +51,7 @@ export default async function AircraftPage({ params }: Props) {
 	console.log("final airports data", airports);
 
 	return (
-		<div className="min-h-screen w-full pt-[25vh] max-w-7xl mx-auto px-10 font-arimo text-black">
+		<div className="min-h-screen w-full pt-[10vh] max-w-7xl mx-auto px-10 font-arimo text-black">
 			<div className="bg-white rounded-lg p-5 h-80 grid grid-cols-2 auto-rows-[100%] px-20">
 				<div className="flex flex-col items-start justify-center gap-y-2">
 					<h1 className="text-8xl font-bold">{aircraft.tail_number}</h1>
