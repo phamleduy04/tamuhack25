@@ -50,8 +50,8 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
 
         res.json({
             message: 'File uploaded successfully',
-            fileName: decodeURIComponent(data.Location.slice(1)),
-            url: `https://cdn.aviateur.tech${data.Location}`
+            fileName: decodeURIComponent(data.Key),
+            url: `https://cdn.aviateur.tech${data.Key}`
         });
     } catch (err) {
         console.error('Upload error:', err);
