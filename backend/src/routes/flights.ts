@@ -4,7 +4,11 @@ import { get, set } from '../db/cache';
 import type { State } from '../types/opensky';
 
 const client = axios.create({
-    baseURL: 'https://opensky-network.org/api'
+    baseURL: 'https://opensky-network.org/api',
+    auth: {
+        username: process.env.OPENSKY_USERNAME as string,
+        password: process.env.OPENSKY_PASSWORD as string,
+    }
 });
 
 const route = Router();

@@ -7,7 +7,7 @@ const get = async () => {
 };
 
 const set = async (data: string) => {
-    return await redis.set('cache', data, 'EX', 240);
+    return await redis.set('cache', data, 'EX', 60);
 };
 
 export { get, set };
