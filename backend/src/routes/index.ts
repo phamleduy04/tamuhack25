@@ -41,7 +41,7 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
             Body: fileStream,
             ContentType: req.file.mimetype,
         };
-        
+
 
         const data = await s3.upload(params).promise();
 
@@ -56,6 +56,29 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
     } catch (err) {
         console.error('Upload error:', err);
         res.status(500).send('Error uploading file');
+    }
+});
+
+index.get('/files', async (req, res) => {
+    try {
+        const params = {
+            Bucket: process.env.B2_BUCKET_NAME!,
+        };
+
+        const data = await s3.listObjectsV2(params).promise();
+        const files = data.Contents?.map((file) => ({
+            key: encodeURIComponent(file.Key as string),
+            size: file.Size,
+            lastModified: file.LastModified,
+            url: `https://cdn.aviateur.tech/${encodeURIComponent(file.Key as string)}`
+        }));
+
+        res.json(files);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).send('Internal server error!');
+        return;
     }
 });
 
