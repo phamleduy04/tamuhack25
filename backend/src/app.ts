@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 // Routes
 import indexRouter from './routes/index';
 import tagRouter from './routes/Tag';
+import flightRouter from './routes/flights';
 // Create Express server
 export const app = express();
 
@@ -36,3 +37,4 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/', indexRouter);
 app.use('/tag', tagRouter);
+app.use('/flights', flightRouter);
