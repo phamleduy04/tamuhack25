@@ -4,7 +4,9 @@ import Timeline from "./timelines";
 import { $fetch, getAirportsData, getSpecificAircraftData } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+import { db } from "@/db";
+import { eq } from "drizzle-orm";
+import { reports as reportsSchema } from "@/db/schema";
 interface Props {
 	params: Promise<{
 		id: string;
@@ -27,6 +29,10 @@ export default async function AircraftPage({ params }: Props) {
 	if (error) {
 		return <div>Error: {error.message}</div>;
 	}
+
+	const reports = await db.query.reports.findMany({
+		where: eq(reportsSchema.icao24, aircraft.icao24),
+	});
 
 	const uniqueAirportIDs = new Set<string>();
 
@@ -63,7 +69,7 @@ export default async function AircraftPage({ params }: Props) {
 				</div>
 			</div>
 			<div className="grid grid-cols-5 auto-rows-[400px] gap-5 pt-5">
-				<div className="bg-white col-span-2 rounded-lg p-5 flex flex-col justify-start">
+				<div className="bg-white col-span-2 rounded-lg p-5 flex flex-col justify-start overflow-y-scroll">
 					<h1 className="font-bold text-3xl">Flight Schedule</h1>
 
 					<Timeline
@@ -103,13 +109,30 @@ export default async function AircraftPage({ params }: Props) {
 					/>
 				</div>
 				<div className="bg-white rounded-lg col-span-5 p-5">
-					<div className="flex items-center justify-start">
+					<div className="flex items-center justify-start pb-7">
 						<h1 className="font-bold text-3xl">Reports</h1>
 						<div className="justify-self-end ml-auto">
 							<Link href={`/new-report?id=${(await params).id}`}>
 								<Button>New Report</Button>
 							</Link>
 						</div>
+					</div>
+					<div className="flex items-start justify-start flex-col gap-y-2 w-full">
+						{reports.map((r) => {
+							return (
+								<div
+									key={r.id}
+									className="flex items-center w-full py-2 border-b border-t border-black"
+								>
+									<p className="font-bold text-lg">{r.title}</p>
+									<div className="justify-self-end ml-auto">
+										<Link href={`/reports/${r.id}`}>
+											<Button>View</Button>
+										</Link>
+									</div>
+								</div>
+							);
+						})}
 					</div>
 				</div>
 			</div>

@@ -10,6 +10,8 @@ interface TimeLineItem {
 	isCurrent: boolean;
 	isStart: boolean;
 	isEnd: boolean;
+	estimated_out: string;
+	estimated_in: string;
 }
 
 function TimeLineItem({
@@ -22,7 +24,11 @@ function TimeLineItem({
 	isCurrent,
 	isStart,
 	isEnd,
+	estimated_out,
+	estimated_in,
 }: TimeLineItem) {
+	console.log(estimated_out, estimated_in)
+	console.log(new Date(estimated_in).getTime() - new Date(estimated_out).getTime())
 	return (
 		<>
 			<div className="flex flex-col justify-end">
@@ -37,6 +43,9 @@ function TimeLineItem({
 							<p className="text-xs font-semibold">
 								{fromLocation ? fromLocation : "TBA"} to{" "}
 								{toLocation ? toLocation : "TBA"}
+							</p>
+							<p className="text-[0.7rem] font-medium">
+								{`Arrived ${new Date(estimated_in).getTime() - new Date(estimated_out).getTime()}`}
 							</p>
 						</div>
 					</div>
