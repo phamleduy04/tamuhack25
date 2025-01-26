@@ -3,6 +3,7 @@ import multer from 'multer';
 import fs, { existsSync, mkdirSync } from 'fs';
 import s3 from '../s3';
 import path from 'path';
+import dayjs from 'dayjs';
 
 const index = Router();
 const uploadPath = path.join(__dirname, '..', '..', 'uploads');
@@ -41,7 +42,7 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
             Body: fileStream,
             ContentType: req.file.mimetype,
         };
-        
+
 
         const data = await s3.upload(params).promise();
 
@@ -56,6 +57,28 @@ index.post('/upload', multerStorage.single('file'), async (req, res) => {
     } catch (err) {
         console.error('Upload error:', err);
         res.status(500).send('Error uploading file');
+    }
+});
+
+index.get('/files', async (req, res) => {
+    try {
+        const params = {
+            Bucket: process.env.B2_BUCKET_NAME!,
+        };
+        const data = await s3.listObjectsV2(params).promise();
+        const files = data.Contents?.map((file) => ({
+            key: encodeURIComponent(file.Key as string),
+            size: file.Size,
+            lastModified: dayjs(file.LastModified),
+            url: `https://cdn.aviateur.tech/${encodeURIComponent(file.Key as string)}`
+        }));
+
+        const sortedFiles = files?.sort((a, b) => b.lastModified.unix() - a.lastModified.unix());
+
+        res.json(sortedFiles);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send('Internal server error!');
     }
 });
 
