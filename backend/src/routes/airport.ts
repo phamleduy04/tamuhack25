@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { get, set } from '../db/cache';
 import { getAirport } from '../apis/airportdb';
 
 const router = Router();
@@ -10,18 +9,14 @@ router.get('/', async (req, res) => {
         res.status(400).send('Invalid request!');
         return;
     }
-    const cache = await get(`future-flights:${icao}`);
-    if (cache) {
-        res.json(JSON.parse(cache));
-        return;
-    }
-    const response = await getAirport(icao as string);
-    if (!response) {
-        res.status(404).send('Not found!');
-        return;
-    }
-    res.json(response);
-    await set(`future-flights:${icao}`, JSON.stringify(response));
+    const airportList = [...new Set(String(icao).split(','))];
+
+    const response = await Promise.all(airportList.map(async (query) => {
+        const airport = await getAirport(query as string);
+        if (airport) return airport;
+    }));
+
+    res.json(response.filter(res => res));
 });
 
 export default router;
