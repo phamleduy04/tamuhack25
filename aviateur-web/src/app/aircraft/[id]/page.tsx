@@ -7,6 +7,7 @@ import Link from "next/link";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
 import { reports as reportsSchema } from "@/db/schema";
+import { getAircraftImage } from "@/lib/utils";
 interface Props {
 	params: Promise<{
 		id: string;
@@ -51,20 +52,20 @@ export default async function AircraftPage({ params }: Props) {
 
 	return (
 		<div className="min-h-screen w-full pt-[25vh] max-w-7xl mx-auto px-10 font-arimo text-black">
-			<div className="bg-white rounded-lg p-5 h-80 grid grid-cols-2 auto-rows-[100%]">
+			<div className="bg-white rounded-lg p-5 h-80 grid grid-cols-2 auto-rows-[100%] px-20">
 				<div className="flex flex-col items-start justify-center gap-y-2">
 					<h1 className="text-8xl font-bold">{aircraft.tail_number}</h1>
 					<p className="font-bold font-mono text-lg pl-1">
-						Boeing {aircraft.latitude} • {aircraft.icao24.toUpperCase()}
+						{getAircraftImage(42, aircraft.tail_number).aircraft} • {aircraft.icao24.toUpperCase()}
 					</p>
 				</div>
 				<div className="flex items-center justify-center overflow-hidden">
 					<Image
-						src={`/img/aircraft/a321.png`}
+						src={getAircraftImage(42, aircraft.tail_number).image}
 						alt={"Plane Image"}
 						width={500}
 						height={500}
-						className="object-cover -translate-y-5 rotate-3 drop-shadow-2xl"
+						className="object-cover -translate-y-2 -scale-100 rotate-[175deg] drop-shadow-xl"
 					/>
 				</div>
 			</div>
@@ -98,6 +99,8 @@ export default async function AircraftPage({ params }: Props) {
 								isStart:
 									flight.estDepartureAirport === flight.estArrivalAirport,
 								isEnd: flight.estDepartureAirport === flight.estArrivalAirport,
+								estimated_out: flight.estimated_out || new Date().toISOString(),
+								estimated_in: flight.estimated_in || new Date().toISOString(),
 							};
 						})}
 					/>
