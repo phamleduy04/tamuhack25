@@ -73,6 +73,17 @@ const schema = createSchema({
 		}),
 		output: z.array(airportSchema),
 	},
+	"/files": {
+		method: "get",
+		output: z.array(
+			z.object({
+				key: z.string(),
+				size: z.number(),
+				lastModified: z.string(),
+				url: z.string(),
+			})
+		),
+	},
 });
 
 export const $fetch = createFetch({
