@@ -54,6 +54,8 @@ const schema = createSchema({
 				icao24: z.string(),
 				estDepartureAirport: z.string().nullable(),
 				estArrivalAirport: z.string().nullable(),
+				estimated_out: z.string().nullable(),
+    		estimated_in: z.string().nullable(),
 			})
 		),
 	},
