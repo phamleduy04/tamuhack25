@@ -9,7 +9,6 @@ import { USDZLoader } from "three-usdz-loader";
 @Component
 export default class Home extends Vue {
   @Ref("three-container") threeContainer!: HTMLElement;
-  @Ref("file") fileInput!: HTMLInputElement;
 
   scene!: THREE.Scene;
   camera!: THREE.PerspectiveCamera;
@@ -17,28 +16,38 @@ export default class Home extends Vue {
   currentFileName!: string;
   controls!: OrbitControls;
 
-  // Tells if a model is currently visible
   modelIsVisible = false;
-
-  // Tells if a file is loading currently
   modelIsLoading = false;
-
-  // Dialog open or closed
+  hasUrlParam = false;
   dialog = false;
-
-  // Loaded models
   loadedModels: USDZInstance[] = [];
-
-  // USDZ loader instance. Only one should be instantiated in the DOM scope
   loader!: USDZLoader;
-
-  // Simple error handling
   error: string | null = null;
-
-  // Tells if the loader has loaded with success
   loaderReady: boolean | null = null;
 
+  async loadModelFromUrl(url: string): Promise<void> {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const blob = await response.blob();
+      const fileName = url.split('/').pop() || 'model.usdz';
+      const file = new File([blob], fileName, { type: 'model/vnd.usd+zip' });
+      await this.loadFile(file);
+    } catch (e) {
+      this.error = e as string;
+      console.error('Failed to load model from URL:', e);
+    }
+  }
+
   async mounted(): Promise<void> {
+    // Check for URL parameter and load the model if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const modelUrl = urlParams.get('url');
+    console.log(modelUrl);
+    if (modelUrl) {
+      this.loadModelFromUrl(modelUrl);
+      this.hasUrlParam = true;
+    }
     // Setup camera
     this.camera = new THREE.PerspectiveCamera(
       27,
@@ -85,7 +94,7 @@ export default class Home extends Vue {
       );
     });
 
-    //Add the canvas to the document
+    // Add the canvas to the document
     this.threeContainer.appendChild(this.renderer.domElement);
 
     // Setup navigation
@@ -102,14 +111,10 @@ export default class Home extends Vue {
     window.addEventListener("resize", this.onWindowResize);
   }
 
-  /**
-   * Main update loop
-   */
   async animate(): Promise<void> {
     const secs = new Date().getTime() / 1000;
     await new Promise((resolve) => setTimeout(resolve, 10));
 
-    // Update all models animations (in our exemple there is only one model at a time)
     for (const loadedModel of this.loadedModels) {
       loadedModel.update(secs);
     }
@@ -118,35 +123,22 @@ export default class Home extends Vue {
     requestAnimationFrame(this.animate.bind(null));
   }
 
-  /**
-   * Load a USDZ file in the scene
-   * @param file
-   * @returns
-   */
   async loadFile(file: File): Promise<void> {
-    // Prevents multiple loadings in parallel
     if (this.modelIsLoading) {
       return;
     }
 
-    // Notice model is now loading
     this.modelIsLoading = true;
-
-    // Reset any previous error
     this.error = null;
 
-    // Clearup any previsouly loaded model
-    // We could technically load multiple files by removing this for loop
     for (const el of this.loadedModels) {
       el.clear();
     }
     this.loadedModels = [];
 
-    // Create the ThreeJs Group in which the loaded USDZ model will be placed
     const group = new THREE.Group();
     this.scene.add(group);
 
-    // Load file and catch any error to show the user
     try {
       const loadedModel = await this.loader.loadFile(file, group);
       this.loadedModels.push(loadedModel);
@@ -157,20 +149,15 @@ export default class Home extends Vue {
       return;
     }
 
-    // Fits the camera to match the loaded model
     const allContainers = this.loadedModels.map((el: USDZInstance) => {
       return el.getGroup();
     });
     this.fitCamera(this.camera, this.controls, allContainers);
 
-    // Notice end
     this.modelIsLoading = false;
     this.modelIsVisible = true;
   }
 
-  /**
-   * Fits the camera view to the imported objects
-   */
   fitCamera(
     camera: THREE.PerspectiveCamera,
     controls: OrbitControls,
@@ -218,27 +205,5 @@ export default class Home extends Vue {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-  onChange(): void {
-    if (this.fileInput.files != null) {
-      this.handleFilesUpload(this.fileInput.files);
-    }
-  }
-  onClickDragZone(): void {
-    this.fileInput.click();
-  }
-  dragover(event: DragEvent): void {
-    event.preventDefault();
-  }
-  drop(event: DragEvent): void {
-    event.preventDefault();
-    if (event.dataTransfer == null) {
-      console.error("Files are null");
-      return;
-    }
-    this.handleFilesUpload(event.dataTransfer.files);
-  }
-  handleFilesUpload(files: FileList): void {
-    this.loadFile(files[0]);
   }
 }
