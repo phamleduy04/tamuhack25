@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Viewer from "./viewer";
+import Messages from "./messages";
 
 interface PageProps {
 	params: Promise<{
@@ -61,9 +61,13 @@ export default async function Page({ params }: PageProps) {
 					<p className="text-lg text-balance pt-3">{report.description}</p>
 				</div>
 			</div>
-			<div className="bg-white rounded-lg p-5 aspect-square w-full mt-3">
-				Temp commented out
-				<Viewer modelUrl={report.attachedScan!} />
+			<div className="bg-white rounded-lg p-5 min-h-72 w-full mt-3">
+				<div className="flex flex-col items-start justify-start gap-y-2 text-black">
+					<h1 className="text-3xl font-bold">Discussion</h1>
+					<div className="w-full h-72 mt-3">
+						<Messages reportId={id} />
+					</div>
+				</div>
 			</div>
 		</div>
 	);

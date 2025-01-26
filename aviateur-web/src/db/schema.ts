@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql, relations } from "drizzle-orm";
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const reports = sqliteTable("reports", {
@@ -22,16 +22,18 @@ export const messages = sqliteTable("messages", {
 	createdAt: integer("created_at", { mode: "timestamp" }).default(
 		sql`CURRENT_TIMESTAMP`
 	),
-});
-
-export const reportsToMessages = sqliteTable("reports_to_messages", {
-	reportId: text("report_id")
-		.notNull()
-		.references(() => reports.id),
-	messageId: text("message_id")
-		.notNull()
-		.references(() => messages.id),
 	authorId: text("author_id"),
 	authorImage: text("author_image"),
 	authorName: text("author_name"),
 });
+
+export const reportsRelations = relations(reports, ({ many }) => ({
+	messages: many(messages),
+}));
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+	report: one(reports, {
+		fields: [messages.reportId],
+		references: [reports.id],
+	}),
+}));
