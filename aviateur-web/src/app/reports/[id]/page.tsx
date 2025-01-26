@@ -39,9 +39,17 @@ export default async function Page({ params }: PageProps) {
 						{aircraft.tail_number} • {aircraft.callsign} •{" "}
 						{aircraft.icao24.toUpperCase()}
 					</p>
-					<div className="pt-3">
+					<div className="pt-3 flex items-center gap-x-3">
 						<Link href={`/aircraft/${aircraft.icao24}`}>
 							<Button>View Aircraft</Button>
+						</Link>
+						<Link
+							href={`https://viewer.aviateur.tech/?url=${encodeURIComponent(
+								report.attachedScan || "unknown"
+							)}`}
+							target="_blank"
+						>
+							<Button>View Scan</Button>
 						</Link>
 					</div>
 				</div>
