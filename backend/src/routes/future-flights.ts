@@ -2,6 +2,10 @@ import { Router } from 'express';
 // import { getFlightCache } from '../db/cache';
 // import openskyClient from '../apis/opensky';
 import dayjs from 'dayjs';
+import dayjsUTC from 'dayjs/plugin/utc';
+
+dayjs.extend(dayjsUTC);
+
 import { get, set } from '../db/cache';
 import flightawareClient from '../apis/flightaware';
 
@@ -30,9 +34,10 @@ route.get('/', async (req, res) => {
         res.json(JSON.parse(cache));
         return;
     }
-    const now = dayjs();
+    const start = dayjs().utc().subtract(1, 'day').startOf('day').format('YYYY-MM-DDTHH:mm:ss[Z]');
+    const end = dayjs().utc().add(12, 'hours').format('YYYY-MM-DDTHH:mm:ss[Z]');
 
-    const response = await flightawareClient.get(`/flights/${icao24}?start=${now.subtract(1, 'day').toISOString()}&end=${now.add(1, 'day').toISOString()}`);
+    const response = await flightawareClient.get(`/flights/${icao24}?start=${start}&end=${end}`);
 
     const data = response.data.flights as Flight[];
 
