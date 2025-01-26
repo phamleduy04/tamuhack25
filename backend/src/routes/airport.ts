@@ -18,6 +18,7 @@ router.get('/', async (req, res) => {
     const response = await getAirport(icao as string);
     if (!response) {
         res.status(404).send('Not found!');
+        return;
     }
     res.json(response);
     await set(`future-flights:${icao}`, JSON.stringify(response));
