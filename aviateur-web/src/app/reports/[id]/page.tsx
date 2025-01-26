@@ -62,8 +62,8 @@ export default async function Page({ params }: PageProps) {
 				</div>
 			</div>
 			<div className="bg-white rounded-lg p-5 aspect-square w-full mt-3">
-				{/* Temp commented out */}
-				{/* <Viewer modelUrl={report.attachedScan!} /> */}
+				Temp commented out
+				<Viewer modelUrl={report.attachedScan!} />
 			</div>
 		</div>
 	);
