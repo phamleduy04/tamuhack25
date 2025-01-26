@@ -27,8 +27,8 @@ function TimeLineItem({
 	estimated_out,
 	estimated_in,
 }: TimeLineItem) {
-	console.log(estimated_out, estimated_in)
-	console.log(new Date(estimated_in).getTime() - new Date(estimated_out).getTime())
+	// console.log(estimated_out, estimated_in)
+	// console.log(new Date(estimated_in).getTime() - new Date(estimated_out).getTime())
 	return (
 		<>
 			<div className="flex flex-col justify-end">
@@ -44,9 +44,9 @@ function TimeLineItem({
 								{fromLocation ? fromLocation : "TBA"} to{" "}
 								{toLocation ? toLocation : "TBA"}
 							</p>
-							<p className="text-[0.7rem] font-medium">
+							{/* <p className="text-[0.7rem] font-medium">
 								{`Arrived ${new Date(estimated_in).getTime() - new Date(estimated_out).getTime()}`}
-							</p>
+							</p> */}
 						</div>
 					</div>
 				</div>

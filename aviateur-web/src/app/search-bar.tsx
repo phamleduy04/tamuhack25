@@ -16,7 +16,7 @@ export default function SearchBar() {
 		} else {
 			params.delete("query");
 		}
-		router.push(`/?${params.toString()}`);
+		router.push(`/?${params.toString()}`, { scroll: false });
 	};
 
 	return (
