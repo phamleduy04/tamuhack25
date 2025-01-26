@@ -21,6 +21,8 @@ interface Flight {
         code_icao: string;
         name: string;
     }
+    estimated_out: string;
+    estimated_in: string;
 }
 
 route.get('/', async (req, res) => {
@@ -47,6 +49,8 @@ route.get('/', async (req, res) => {
         estDepartureAirportFullName: flight.origin.name,
         estArrivalAirport: flight.destination.code_icao,
         estArrivalAirportFullName: flight.destination.name,
+        estimated_out: flight.estimated_out,
+        estimated_in: flight.estimated_in,
     }));
 
     res.json(formattedData);
