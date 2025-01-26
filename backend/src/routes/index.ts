@@ -3,6 +3,7 @@ import multer from 'multer';
 import fs, { existsSync, mkdirSync } from 'fs';
 import s3 from '../s3';
 import path from 'path';
+import dayjs from 'dayjs';
 
 const index = Router();
 const uploadPath = path.join(__dirname, '..', '..', 'uploads');
@@ -64,21 +65,20 @@ index.get('/files', async (req, res) => {
         const params = {
             Bucket: process.env.B2_BUCKET_NAME!,
         };
-
         const data = await s3.listObjectsV2(params).promise();
         const files = data.Contents?.map((file) => ({
             key: encodeURIComponent(file.Key as string),
             size: file.Size,
-            lastModified: file.LastModified,
+            lastModified: dayjs(file.LastModified),
             url: `https://cdn.aviateur.tech/${encodeURIComponent(file.Key as string)}`
         }));
 
-        res.json(files);
-    }
-    catch (e) {
+        const sortedFiles = files?.sort((a, b) => b.lastModified.unix() - a.lastModified.unix());
+
+        res.json(sortedFiles);
+    } catch (e) {
         console.error(e);
         res.status(500).send('Internal server error!');
-        return;
     }
 });
 
